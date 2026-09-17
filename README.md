@@ -191,7 +191,14 @@ npx http-server dist-site
 
 It deploys to GitHub Pages from `.github/workflows/pages.yml` on every push to
 `main`. That workflow needs Pages switched on once, under
-**Settings → Pages → Source → GitHub Actions**.
+**Settings → Pages → Build and deployment → Source → GitHub Actions**.
+
+Pick "GitHub Actions", not "Deploy from a branch". The latter is the option the
+settings page offers first, and it makes GitHub run Jekyll over the repo root
+instead of serving this workflow's artifact. Since `dist-site/` is gitignored and
+there is no `index.html` at the root, that build publishes the README as the site
+— and because it runs on the same push, it can land *after* this workflow and
+quietly overwrite it.
 
 ## Licence
 
