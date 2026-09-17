@@ -4,9 +4,9 @@ import assert from 'node:assert/strict';
 import { ADJECTIVES, NOUNS, SUFFIXES, words } from '../src/index.ts';
 
 const LISTS: Array<[string, readonly string[], number]> = [
-  ['adjectives', ADJECTIVES, 256],
-  ['nouns', NOUNS, 256],
-  ['suffixes', SUFFIXES, 128],
+  ['adjectives', ADJECTIVES, 512],
+  ['nouns', NOUNS, 384],
+  ['suffixes', SUFFIXES, 256],
 ];
 
 describe('dictionary', () => {
@@ -47,9 +47,25 @@ describe('dictionary', () => {
     // Not exhaustive — CONTRIBUTING.md carries the actual rule, and review is
     // what enforces it. This just catches the ones most likely to creep back in.
     const blocked = [
-      'moron', 'cretin', 'imbecile', 'spastic', 'gimp', 'retard', 'retarded',
-      'mongoloid', 'lunatic', 'psycho', 'slut', 'whore', 'slag', 'tranny',
-      'faggot', 'fag', 'dyke', 'queer', 'nonce', 'paki', 'chink', 'gyppo',
+      // Disability, including the medicalised ones now used casually.
+      'cretin', 'cripple', 'crippled', 'deranged', 'gimp', 'idiot', 'idiotic',
+      'imbecile', 'lame',
+      'loony', 'lunatic', 'madman', 'mongoloid', 'moron', 'nutjob', 'psycho',
+      'retard', 'retarded', 'schizo', 'spastic', 'spaz',
+      // Aimed at women, or only ever aimed at women.
+      'bimbo', 'bint', 'floozy', 'hag', 'harpy', 'hussy', 'munter', 'scrubber',
+      'shrew', 'skank', 'skanky', 'slag', 'slapper', 'slut', 'trollop',
+      'whore',
+      // Sexuality and gender identity.
+      'dyke', 'fag', 'faggot', 'fairy', 'ladyboy', 'poof', 'poofter',
+      'queer', 'shemale', 'tranny',
+      // Race, ethnicity and nationality.
+      'chink', 'coon', 'gook', 'gyppo', 'gypsy', 'jap', 'paki', 'pikey',
+      'raghead', 'spic', 'towelhead', 'wetback', 'wog',
+      // Religion.
+      'heathen', 'infidel', 'kike', 'yid',
+      // Not a group slur, but an accusation rather than an insult.
+      'nonce', 'paedo', 'pedo',
     ];
     for (const [name, list] of LISTS) {
       const found = blocked.filter((word) => list.includes(word));

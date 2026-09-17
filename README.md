@@ -35,13 +35,13 @@ generate();
 // 'stupid-cunt-head'
 
 generate({ words: 4 });
-// 'moist-angry-splodge-crumpet'
+// 'niffy-guttural-spunk-pilot'
 
 generate({ casing: 'pascal' });
-// 'ClumsyCadBellows'
+// 'UnsightlyGalootKettle'
 
 generate({ separator: '_', casing: 'upper' });
-// 'RANCID_KNACKER_TRUMPET'
+// 'BOLLOCKSED_BAMPOT_JUGGLER'
 ```
 
 CommonJS works the same way:
@@ -58,7 +58,7 @@ const { generate } = require('nsfh');
 import { generateMany } from 'nsfh';
 
 generateMany(3);
-// ['inept-scab-mushroom', 'bloated-scrag-mongoose', 'stale-squib-bottler']
+// ['fetid-fraud-yapper', 'squirting-shitweasel-mushroom', 'gurgling-arse-ape']
 ```
 
 ### On the command line
@@ -100,21 +100,21 @@ role as much as you like:
 
 ```ts
 generate({ pattern: ['adjective', 'adjective', 'noun'] });
-// 'soggy-festering-bellend'
+// 'clotted-raucous-gasbag'
 ```
 
 ## How unique is it?
 
 Random, not sequential — so the question is a birthday-problem one. The packaged
-dictionary holds 558 adjectives, 383 nouns and 245 suffixes.
+dictionary holds 600 adjectives, 421 nouns and 317 suffixes.
 
 | Words | Combinations | Entropy | 50% chance of a collision after |
 | --- | --- | --- | --- |
-| 2 | 213,714 | 17.7 bits | ~544 ids |
-| 3 *(default)* | 52,359,930 | 25.6 bits | ~8,520 ids |
-| 4 | 29,164,481,010 | 34.8 bits | ~201,074 ids |
-| 5 | 11,140,831,745,820 | 43.3 bits | ~3,929,946 ids |
-| 6 | 6,194,302,450,675,920 | 52.5 bits | ~92,666,750 ids |
+| 2 | 252,600 | 17.9 bits | ~592 ids |
+| 3 *(default)* | 80,074,200 | 26.3 bits | ~10,536 ids |
+| 4 | 47,964,445,800 | 35.5 bits | ~257,862 ids |
+| 5 | 20,145,067,236,000 | 44.2 bits | ~5,284,600 ids |
+| 6 | 12,046,750,207,128,000 | 53.4 bits | ~129,229,803 ids |
 
 Three words is fine for naming a few thousand things — build runs, test fixtures,
 staging environments, pull request branches. If you need a primary key, use more
@@ -124,8 +124,8 @@ will do the arithmetic for you:
 ```ts
 import { idsUntilCollision } from 'nsfh';
 
-idsUntilCollision(0.01);              // ~1,026 ids before a 1% chance
-idsUntilCollision(0.5, { words: 5 }); // ~3,929,946
+idsUntilCollision(0.01);              // ~1,269 ids before a 1% chance
+idsUntilCollision(0.5, { words: 5 }); // ~5,284,600
 ```
 
 Ids are drawn from `crypto.getRandomValues` with rejection sampling, so every
@@ -139,9 +139,9 @@ About 3.5 million ids a second on a laptop-class machine, because entropy is
 drawn 256 words at a time rather than one syscall per word:
 
 ```
-generate()                            3,506,465 ops/sec  (285 ns each)
-generate({ words: 6 })                2,332,299 ops/sec  (429 ns each)
-parts()                               5,767,332 ops/sec  (173 ns each)
+generate()                            3,656,032 ops/sec  (274 ns each)
+generate({ words: 6 })                2,035,846 ops/sec  (491 ns each)
+parts()                               4,812,673 ops/sec  (208 ns each)
 ```
 
 Run `npm run bench` to check it yourself.
@@ -159,7 +159,7 @@ The lists are plain exported arrays, so you can look before you install:
 ```ts
 import { words } from 'nsfh';
 
-words.adjectives.length; // 558
+words.adjectives.length; // 600
 words.nouns.includes('bellend'); // true
 ```
 
