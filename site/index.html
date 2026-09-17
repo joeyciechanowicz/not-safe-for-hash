@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>nsfh — rude human-readable ids</title>
+    <meta
+      name="description"
+      content="A human-readable unique id generator that only produces rude, obscene phrases. Fast, zero dependencies, dictionary included."
+    />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text y='13' font-size='13'>🤬</text></svg>" />
+    <link rel="stylesheet" href="./styles.css" />
+    <script type="importmap">
+      { "imports": { "nsfh": "./nsfh/index.js" } }
+    </script>
+  </head>
+  <body>
+    <div class="warning" role="note">
+      <strong>Heads up:</strong> every id on this page is deliberately obscene. That is the
+      entire joke. Not safe for work, your nan, or your production logs.
+    </div>
+
+    <main>
+      <header class="masthead">
+        <h1>nsfh</h1>
+        <p class="tagline">
+          Human-readable unique ids, but rude. Fast, zero dependencies, dictionary included.
+        </p>
+      </header>
+
+      <section class="stage" aria-labelledby="stage-heading">
+        <h2 id="stage-heading" class="visually-hidden">Generated id</h2>
+        <button
+          id="id-display"
+          class="id-display"
+          type="button"
+          title="Click to copy"
+          aria-describedby="stage-hint"
+        >
+          <span id="id-text">generating…</span>
+        </button>
+        <p id="stage-hint" class="hint">
+          Click the id to copy it. Press <kbd>Space</kbd> to generate another.
+        </p>
+        <button id="reroll" class="primary" type="button">Generate another</button>
+      </section>
+
+      <section class="controls" aria-labelledby="controls-heading">
+        <h2 id="controls-heading" class="visually-hidden">Options</h2>
+
+        <div class="control">
+          <label for="words">Words <output id="words-value">3</output></label>
+          <input id="words" type="range" min="2" max="6" value="3" step="1" />
+        </div>
+
+        <div class="control">
+          <label for="separator">Separator</label>
+          <select id="separator">
+            <option value="-" selected>hyphen&nbsp;&nbsp;a-b-c</option>
+            <option value="_">underscore&nbsp;&nbsp;a_b_c</option>
+            <option value=".">dot&nbsp;&nbsp;a.b.c</option>
+            <option value=" ">space&nbsp;&nbsp;a b c</option>
+            <option value="">none&nbsp;&nbsp;abc</option>
+          </select>
+        </div>
+
+        <div class="control">
+          <label for="casing">Casing</label>
+          <select id="casing">
+            <option value="lower" selected>lower</option>
+            <option value="upper">UPPER</option>
+            <option value="title">Title</option>
+            <option value="camel">camelCase</option>
+            <option value="pascal">PascalCase</option>
+          </select>
+        </div>
+
+        <div class="control control--check">
+          <input id="allow-repeats" type="checkbox" />
+          <label for="allow-repeats">Allow a repeated word</label>
+        </div>
+      </section>
+
+      <section class="stats" aria-labelledby="stats-heading">
+        <h2 id="stats-heading" class="visually-hidden">Entropy</h2>
+        <dl>
+          <div class="stat">
+            <dt>Combinations</dt>
+            <dd id="stat-combinations">—</dd>
+          </div>
+          <div class="stat">
+            <dt>Entropy</dt>
+            <dd id="stat-entropy">—</dd>
+          </div>
+          <div class="stat">
+            <dt>Coin-flip collision</dt>
+            <dd id="stat-collision">—</dd>
+          </div>
+        </dl>
+        <p class="stats-note" id="stats-note">—</p>
+      </section>
+
+      <section class="batch" aria-labelledby="batch-heading">
+        <div class="batch-header">
+          <h2 id="batch-heading">A round of ten</h2>
+          <button id="batch-refresh" type="button" class="secondary">Refresh</button>
+        </div>
+        <ul id="batch-list" class="batch-list"></ul>
+      </section>
+
+      <section class="usage" aria-labelledby="usage-heading">
+        <h2 id="usage-heading">Use it</h2>
+        <pre><code>npm install nsfh</code></pre>
+        <pre><code><span class="tok-kw">import</span> { generate } <span class="tok-kw">from</span> <span class="tok-str">'nsfh'</span>;
+
+generate(); <span class="tok-com">// '<span id="code-sample">stupid-cunt-head</span>'</span></code></pre>
+      </section>
+
+      <footer>
+        <a href="https://github.com/joeyciechanowicz/nsfh">GitHub</a>
+        <span aria-hidden="true">·</span>
+        <a href="https://www.npmjs.com/package/nsfh">npm</a>
+        <span aria-hidden="true">·</span>
+        <span>MIT</span>
+      </footer>
+    </main>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

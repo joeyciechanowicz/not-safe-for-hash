@@ -1,0 +1,66 @@
+{
+  "name": "nsfh",
+  "version": "0.1.0",
+  "description": "Human-readable unique id generator that only produces rude, obscene phrases. Fast, zero dependencies, dictionary included.",
+  "keywords": [
+    "id",
+    "uuid",
+    "human-readable",
+    "readable-id",
+    "slug",
+    "generator",
+    "rude",
+    "profanity",
+    "nsfw"
+  ],
+  "license": "MIT",
+  "author": "Joey Ciechanowicz",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joeyciechanowicz/nsfh.git"
+  },
+  "homepage": "https://joeyciechanowicz.github.io/nsfh/",
+  "bugs": {
+    "url": "https://github.com/joeyciechanowicz/nsfh/issues"
+  },
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/esm/index.d.ts",
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/esm/index.d.ts",
+  "bin": {
+    "nsfh": "./bin/nsfh.js"
+  },
+  "files": [
+    "dist",
+    "bin",
+    "README.md",
+    "LICENSE"
+  ],
+  "sideEffects": false,
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "node --test \"test/**/*.test.ts\"",
+    "build": "npm run build:esm && npm run build:cjs && node scripts/postbuild.mjs",
+    "build:esm": "tsc -p tsconfig.build.json",
+    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "build:site": "npm run build && tsc -p site/tsconfig.json && node scripts/build-site.mjs",
+    "bench": "node bench/bench.ts",
+    "clean": "node -e \"fs.rmSync('dist',{recursive:true,force:true});fs.rmSync('dist-site',{recursive:true,force:true})\"",
+    "prepublishOnly": "npm run clean && npm run build"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.3",
+    "typescript": "^5.7.2"
+  }
+}
