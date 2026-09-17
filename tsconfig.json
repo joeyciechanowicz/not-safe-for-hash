@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "lib": ["ES2022", "DOM"],
+    "types": ["node"],
+    "noEmit": true
+  },
+  // site/ has its own tsconfig: it resolves "nsfh" to the built declarations.
+  "include": ["src", "test", "bench", "scripts"]
+}

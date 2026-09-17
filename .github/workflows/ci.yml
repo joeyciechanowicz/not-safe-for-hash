@@ -1,0 +1,65 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Node ${{ matrix.node }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # 22.18 is the first release to strip TypeScript types without a flag,
+        # which is what lets the tests run straight off src/.
+        node: ['20.x', '22.x', '24.x']
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+
+      - run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Build
+        run: npm run build
+
+      - name: Test
+        # Node 20 cannot strip types, so it cannot run the TypeScript sources.
+        # It still builds the package and smoke-tests the output below, which is
+        # what matters for a runtime the package claims to support.
+        run: npm test
+        if: matrix.node != '20.x'
+
+      - name: Smoke test the built package
+        run: |
+          node -e "import('./dist/esm/index.js').then(m => { const id = m.generate(); if (!/^[a-z]+-[a-z]+-[a-z]+$/.test(id)) throw new Error('bad esm id: ' + id); console.log('esm', id); })"
+          node -e "const id = require('./dist/cjs/index.js').generate(); if (!/^[a-z]+-[a-z]+-[a-z]+$/.test(id)) throw new Error('bad cjs id: ' + id); console.log('cjs', id)"
+          node bin/nsfh.js 3
+          node bin/nsfh.js --stats
+
+  site:
+    name: Build site
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          cache: npm
+
+      - run: npm ci
+      - run: npm run build:site

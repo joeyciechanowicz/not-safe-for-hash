@@ -1,0 +1,18 @@
+{
+  "extends": "../tsconfig.base.json",
+  // The site is its own program: it consumes the built package through the
+  // import map in index.html, exactly as an outside consumer would.
+  "compilerOptions": {
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "types": [],
+    "outDir": "../dist-site",
+    "rootDir": ".",
+    "noEmit": false,
+    "paths": {
+      "nsfh": ["../dist/esm/index.d.ts"]
+    }
+  },
+  "include": ["."]
+}
