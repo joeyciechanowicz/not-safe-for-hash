@@ -10,6 +10,9 @@ The usual `silly-goose-tea` id generators are charming. This one is not. It is t
 same idea — a memorable phrase instead of `f47ac10b-58cc-4372` — drawn from a
 dictionary of nothing but profanity and insults. It is a joke, and it works.
 
+It goes both ways: `generate()` invents a new id, and `hash()` turns a string
+you already have into the same rude phrase every time.
+
 > [!WARNING]
 > Every id this package produces is deliberately obscene. That is the whole point.
 > Do not put it in front of customers, and think twice about your logs.
@@ -61,6 +64,52 @@ generateMany(3);
 // ['fetid-fraud-yapper', 'squirting-shitweasel-mushroom', 'gurgling-arse-ape']
 ```
 
+### As a hash function
+
+`generate` invents a new id every time. `hash` does the opposite: it maps an
+input to a phrase and keeps it there, on every machine and every run.
+
+```ts
+import { hash } from 'nsfh';
+
+hash('joey');
+// 'feeble-punk-clobberer'
+
+hash('joey');
+// 'feeble-punk-clobberer', still
+
+hash('9f2c1ab');
+// 'sludgy-dross-brain'
+
+hash('https://example.com/orders/8f14e45f');
+// 'inflamed-ballbag-wrestler'
+```
+
+Useful when the thing you are naming already has a boring identifier — a commit
+sha, a url, a branch, a customer number. Everyone who hashes it arrives at the
+same rude name for it, with nothing to store and nothing to look up.
+
+It takes every option `generate` does, plus a `seed` to namespace it:
+
+```ts
+hash('joey', { words: 4 }); // 'feeble-naff-donkey-sifter'
+hash('joey', { seed: 1 });  // 'unbearable-lurgy-pancake', just as stable
+```
+
+Input is hashed as UTF-8, so a `Uint8Array` and the string it encodes come out
+alike. `hashParts` gives you the words unjoined, exactly as `parts` does.
+
+> [!IMPORTANT]
+> This is not a cryptographic hash, and it cannot be collision-free: there are
+> only as many phrases as the table below says, so two inputs landing on one id
+> is a matter of when, not if. Unlike a clash between two random ids, this kind
+> is permanent — those two inputs map to that phrase for good. Name things with
+> it; do not key things by it.
+
+Output is tied to the packaged dictionary. Adding or removing a single word
+moves every phrase, so a dictionary change is a breaking change — pinned by the
+test suite so it cannot happen by accident.
+
 ### On the command line
 
 ```sh
@@ -77,6 +126,8 @@ npx nsfh --stats      # combinations, entropy, collision odds
 | `generate(options?)` | One id as a string. |
 | `generateMany(count, options?)` | `count` ids, all distinct within the batch. |
 | `parts(options?)` | The words of one id, unjoined and already cased. |
+| `hash(input, options?)` | The same input always gives the same id. |
+| `hashParts(input, options?)` | The words of `hash`, unjoined and already cased. |
 | `combinations(options?)` | How many distinct ids the options can produce. |
 | `entropyBits(options?)` | `log2(combinations())`. |
 | `idsUntilCollision(probability?, options?)` | Birthday bound — ids drawn before a collision hits that probability. |
@@ -92,7 +143,8 @@ npx nsfh --stats      # combinations, entropy, collision odds
 | `separator` | `string` | `'-'` | `''` when casing is `camel` or `pascal`. |
 | `casing` | `'lower' \| 'upper' \| 'title' \| 'camel' \| 'pascal'` | `'lower'` | |
 | `allowRepeats` | `boolean` | `false` | Whether one word may appear twice in an id. |
-| `random` | `() => number` | `crypto.getRandomValues` | Supply your own to make output reproducible. |
+| `random` | `() => number` | `crypto.getRandomValues` | `generate` only. Supply your own to make output reproducible. |
+| `seed` | `number` | `0` | `hash` only. Namespaces the hash: same input, different seed, different phrase. |
 
 A `Role` is `'adjective'`, `'noun'` or `'suffix'`. The default pattern is one of
 each, which is where `stupid-cunt-head` comes from. Custom patterns can repeat a
@@ -133,16 +185,27 @@ word is equally likely — a plain `% length` would quietly favour the start of 
 alphabet. On a runtime with no Web Crypto it falls back to `Math.random`, which
 is fine for ids and not fine for secrets.
 
+The same table governs `hash`, since it draws from the same dictionary — but
+read it differently. A collision between two random ids is bad luck you can
+retry; a collision between two hashed inputs is a fact about those two inputs,
+and it will still be there tomorrow.
+
 ## Speed
 
-About 3.5 million ids a second on a laptop-class machine, because entropy is
+About three million ids a second on a laptop-class machine, because entropy is
 drawn 256 words at a time rather than one syscall per word:
 
 ```
-generate()                            3,656,032 ops/sec  (274 ns each)
-generate({ words: 6 })                2,035,846 ops/sec  (491 ns each)
-parts()                               4,812,673 ops/sec  (208 ns each)
+generate()                            3,056,737 ops/sec  (327 ns each)
+generate({ words: 6 })                1,547,588 ops/sec  (646 ns each)
+parts()                               5,137,618 ops/sec  (195 ns each)
+hash('joey')                          2,228,767 ops/sec  (449 ns each)
+hash(a 62-byte url)                   1,696,370 ops/sec  (589 ns each)
 ```
+
+Hashing costs a MurmurHash3 pass over the input on top of the word selection,
+so unlike `generate` it gets slower as the input gets longer — gently, at
+around 750 MB a second.
 
 Run `npm run bench` to check it yourself.
 

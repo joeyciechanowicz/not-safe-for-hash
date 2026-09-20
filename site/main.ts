@@ -10,6 +10,7 @@ import {
   entropyBits,
   generate,
   generateMany,
+  hash,
   idsUntilCollision,
   type Casing,
   type GenerateOptions,
@@ -33,8 +34,12 @@ const casingSelect = element<HTMLSelectElement>('casing');
 const allowRepeatsInput = element<HTMLInputElement>('allow-repeats');
 const batchList = element<HTMLUListElement>('batch-list');
 const batchRefresh = element<HTMLButtonElement>('batch-refresh');
+const hashInput = element<HTMLInputElement>('hash-input');
+const hashOutput = element<HTMLButtonElement>('hash-output');
+const hashText = element('hash-text');
 const toast = element('toast');
 const codeSample = element('code-sample');
+const codeHashSample = element('code-hash-sample');
 
 const statCombinations = element('stat-combinations');
 const statEntropy = element('stat-entropy');
@@ -135,11 +140,18 @@ function refreshStats(): void {
     `bet that two of them match. Want better odds? Add a word.`;
 }
 
+function refreshHash(): void {
+  const id = hash(hashInput.value, currentOptions());
+  hashText.textContent = id;
+  hashOutput.dataset['id'] = id;
+}
+
 function refreshAll(): void {
   wordsValue.textContent = wordsInput.value;
   roll();
   refreshStats();
   refreshBatch();
+  refreshHash();
 }
 
 idDisplay.addEventListener('click', () => {
@@ -149,6 +161,12 @@ idDisplay.addEventListener('click', () => {
 
 rerollButton.addEventListener('click', roll);
 batchRefresh.addEventListener('click', refreshBatch);
+hashInput.addEventListener('input', refreshHash);
+
+hashOutput.addEventListener('click', () => {
+  const id = hashOutput.dataset['id'];
+  if (id) void copy(id);
+});
 
 casingSelect.addEventListener('input', () => {
   // A hyphenated PascalCase id is nobody's idea of PascalCase. Move the
@@ -179,7 +197,9 @@ document.addEventListener('keydown', (event) => {
   roll();
 });
 
-// The sample in the usage block should look like something this page produced.
+// The samples in the usage block should be things this page really produced —
+// the hashed one especially, since it is a claim about a specific input.
 codeSample.textContent = generate();
+codeHashSample.textContent = hash('joey');
 
 refreshAll();

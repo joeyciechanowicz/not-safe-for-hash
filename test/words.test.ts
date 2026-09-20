@@ -2,6 +2,7 @@ import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
 
 import { ADJECTIVES, NOUNS, SUFFIXES, words } from '../src/index.ts';
+import { digest128 } from '../src/hash.ts';
 
 const LISTS: Array<[string, readonly string[], number]> = [
   ['adjectives', ADJECTIVES, 512],
@@ -9,7 +10,31 @@ const LISTS: Array<[string, readonly string[], number]> = [
   ['suffixes', SUFFIXES, 256],
 ];
 
+// A digest of the dictionary as shipped. Regenerate with
+// `node scripts/hash-vectors.mjs`.
+// fingerprint:start
+const FINGERPRINT = '39c4d6c96d0d6602681b7a2f49c2917c';
+// fingerprint:end
+
 describe('dictionary', () => {
+  test('has not changed under hash()', () => {
+    // hash() turns an input into indices into these lists, so adding, removing
+    // or reordering a single word rewrites every phrase it has ever returned.
+    // That is a breaking change, and this is where it announces itself.
+    const joined = [ADJECTIVES.join(','), NOUNS.join(','), SUFFIXES.join(',')].join('\n');
+    const actual = digest128(new TextEncoder().encode(joined), 0)
+      .map((word) => word.toString(16).padStart(8, '0'))
+      .join('');
+
+    assert.equal(
+      actual,
+      FINGERPRINT,
+      'The dictionary changed, so every hash() output changed with it. If that is ' +
+        'deliberate, run `node scripts/hash-vectors.mjs` to repin this test and the ' +
+        'vectors in test/hash.test.ts, and release it as a breaking change.',
+    );
+  });
+
   for (const [name, list, minimum] of LISTS) {
     describe(name, () => {
       test('is big enough to be worth shipping', () => {

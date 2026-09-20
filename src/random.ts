@@ -43,6 +43,23 @@ export function randomIndex(bound: number): number {
   return value % bound;
 }
 
+/**
+ * The same rule, applied to a caller's stream of 32-bit words — the
+ * deterministic one behind `hash()`.
+ *
+ * Deliberately not shared with {@link randomIndex}, which would then be calling
+ * `next()` through a pointer on the library's hottest path — worth about 10% of
+ * `generate()`. The duplication is four lines, and both copies have a test
+ * asserting the distribution they produce is flat.
+ */
+export function indexFrom(next: () => number, bound: number): number {
+  if (bound <= 1) return 0;
+  const limit = Math.floor(UINT32_RANGE / bound) * bound;
+  let value = next();
+  while (value >= limit) value = next();
+  return value % bound;
+}
+
 /** The same, but driven by a caller-supplied `() => number` in `[0, 1)`. */
 export function randomIndexFrom(random: () => number, bound: number): number {
   if (bound <= 1) return 0;

@@ -1,13 +1,15 @@
 {
   "name": "nsfh",
-  "version": "0.1.0",
-  "description": "Human-readable unique id generator that only produces rude, obscene phrases. Fast, zero dependencies, dictionary included.",
+  "version": "0.2.0",
+  "description": "Human-readable unique id generator that only produces rude, obscene phrases. Random or hashed, fast, zero dependencies, dictionary included.",
   "keywords": [
     "id",
     "uuid",
     "human-readable",
     "readable-id",
     "slug",
+    "hash",
+    "deterministic",
     "generator",
     "rude",
     "profanity",
