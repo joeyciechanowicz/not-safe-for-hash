@@ -43,13 +43,36 @@ Each list must stay:
 - **unique** within its own list
 - **sorted**, so diffs stay readable
 
-`npm test` checks all three. Adding a word changes nothing else: `combinations()`
-and the README's entropy table are both derived from the list lengths, so update
-the README table if you add enough to move the numbers.
+`npm test` checks all three. `combinations()` and the README's entropy table are
+both derived from the list lengths, so update the README table if you add enough
+to move the numbers.
 
 A good suffix is one that reads as an insult tail after almost any noun —
 `-head`, `-muncher`, `-trumpet`, `-goblin`. If it only works after one specific
 word, it probably belongs in the nouns list instead.
+
+### Adding a word is a breaking change
+
+It did not used to be. `hash()` turns an input into indices into these three
+lists, so inserting a single word shifts everything after it and rewrites every
+phrase `hash()` has ever returned — including ones people have already written
+down.
+
+Two tests hold that line, and both will fail the moment you touch a list:
+
+- `test/words.test.ts` fingerprints the dictionary as shipped
+- `test/hash.test.ts` pins the exact phrase for a table of known inputs
+
+Neither is a wall to climb over. They are there so the change is a decision
+rather than a surprise. When you mean it:
+
+```sh
+node scripts/hash-vectors.mjs   # repins both
+```
+
+Then say so in the release: a minor version while the package is pre-1.0, a
+major one after. `generate()` is unaffected either way — it never promised you
+the same id twice.
 
 ## Before you open a pull request
 

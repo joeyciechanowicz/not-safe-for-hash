@@ -5,7 +5,7 @@
  * an order of magnitude slower.
  */
 
-import { generate, generateMany, parts } from '../src/index.ts';
+import { generate, generateMany, hash, parts } from '../src/index.ts';
 
 function measure(name: string, iterations: number, fn: () => unknown): void {
   // Warm up so the JIT has compiled the hot path before the clock starts.
@@ -31,3 +31,13 @@ measure('generate({ casing: "pascal" })', 500_000, () => generate({ casing: 'pas
 measure('generate({ allowRepeats: true })', 1_000_000, () => generate({ allowRepeats: true }));
 measure('parts()', 1_000_000, () => parts());
 measure('generateMany(1000)', 1_000, () => generateMany(1000));
+
+// Hashing pays for a digest of the input, so unlike generate() it gets slower
+// as the input gets longer. A url is the realistic case; the paragraph is there
+// to show how gently the curve rises.
+const url = 'https://example.com/orders/8f14e45f-ea2b-4a5c-9f3d-1c0b7a6d2e91';
+const paragraph = 'the quick brown fox jumps over the lazy dog. '.repeat(40);
+
+measure('hash("joey")', 1_000_000, () => hash('joey'));
+measure('hash(url)', 1_000_000, () => hash(url));
+measure('hash(1.8kb)', 200_000, () => hash(paragraph));

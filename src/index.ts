@@ -2,12 +2,14 @@
  * nsfh — human-readable unique ids, but rude.
  *
  * ```ts
- * import { generate } from 'nsfh';
- * generate(); // 'stupid-cunt-head'
+ * import { generate, hash } from 'nsfh';
+ * generate();      // 'stupid-cunt-head' — a different one every time
+ * hash('joey');    // the same phrase for 'joey', for ever
  * ```
  */
 
-import { randomIndex, randomIndexFrom } from './random.ts';
+import { hashStream } from './hash.ts';
+import { indexFrom, randomIndex, randomIndexFrom } from './random.ts';
 import { ADJECTIVES, NOUNS, SUFFIXES, words } from './words/index.ts';
 
 export { ADJECTIVES, NOUNS, SUFFIXES, words };
@@ -127,11 +129,18 @@ function applyCasing(word: string, casing: Casing, index: number): string {
 }
 
 /**
- * The words of one id, unjoined and already cased.
+ * Fill a pattern, one word per slot.
  *
- * `parts(options).join(separator)` is exactly what {@link generate} returns.
+ * A random id and a hashed one differ only in where the indices come from, so
+ * both go through here. `stream` is the deterministic source behind
+ * {@link hash}; without it, indices come from `options.random` or the crypto
+ * pool as usual.
+ *
+ * The three sources are branched on rather than passed in as one function
+ * because this is the library's hot loop: a call through a parameter costs
+ * roughly 15% of `parts()`, where a perfectly predicted branch costs nothing.
  */
-export function parts(options?: GenerateOptions): string[] {
+function drawParts(options: GenerateOptions | undefined, stream?: () => number): string[] {
   const pattern = resolvePattern(options);
   const casing = options?.casing ?? 'lower';
   const allowRepeats = options?.allowRepeats ?? false;
@@ -143,9 +152,14 @@ export function parts(options?: GenerateOptions): string[] {
 
   for (let i = 0; i < pattern.length; i++) {
     const list = LISTS[pattern[i] as Role];
+    const bound = list.length;
     let word = '';
     for (let attempt = 0; attempt <= REPEAT_RETRIES; attempt++) {
-      const index = random ? randomIndexFrom(random, list.length) : randomIndex(list.length);
+      const index = stream
+        ? indexFrom(stream, bound)
+        : random
+          ? randomIndexFrom(random, bound)
+          : randomIndex(bound);
       word = list[index] as string;
       if (allowRepeats || !chosen.includes(word)) break;
     }
@@ -154,6 +168,15 @@ export function parts(options?: GenerateOptions): string[] {
   }
 
   return result;
+}
+
+/**
+ * The words of one id, unjoined and already cased.
+ *
+ * `parts(options).join(separator)` is exactly what {@link generate} returns.
+ */
+export function parts(options?: GenerateOptions): string[] {
+  return drawParts(options);
 }
 
 /**
@@ -206,6 +229,43 @@ export function generateMany(count: number, options?: GenerateOptions): string[]
   }
 
   return result;
+}
+
+export interface HashOptions extends Omit<GenerateOptions, 'random'> {
+  /**
+   * Namespaces the hash: the same input under a different seed gives a
+   * different phrase. Defaults to `0`.
+   */
+  seed?: number;
+}
+
+/**
+ * The words of {@link hash}, unjoined and already cased.
+ *
+ * `hashParts(input, options).join(separator)` is exactly what `hash` returns.
+ */
+export function hashParts(input: string | Uint8Array, options?: HashOptions): string[] {
+  return drawParts(options, hashStream(input, options?.seed ?? 0));
+}
+
+/**
+ * The same input always gives the same rude phrase.
+ *
+ * ```ts
+ * hash('joey');              // 'feeble-punk-clobberer', every time
+ * hash('joey', { seed: 1 }); // a different phrase, just as stable
+ * ```
+ *
+ * Not a cryptographic hash, and not collision-free: the output space is the id
+ * space, so {@link combinations} is also the number of distinct phrases there
+ * are to go round. Unlike a collision between two random ids, a collision here
+ * is permanent — those two inputs map to that phrase for good.
+ *
+ * Output is tied to the packaged dictionary. Adding or removing a word moves
+ * every phrase, which is why a dictionary change is a breaking change.
+ */
+export function hash(input: string | Uint8Array, options?: HashOptions): string {
+  return hashParts(input, options).join(resolveSeparator(options));
 }
 
 /**

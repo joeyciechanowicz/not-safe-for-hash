@@ -378,6 +378,70 @@ input[type="checkbox"] {
   color: var(--accent);
 }
 
+/* Hashing ------------------------------------------------------------------ */
+
+.hashing {
+  margin-bottom: 2.5rem;
+}
+
+.hashing h2 {
+  color: var(--text-dim);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  margin: 0 0 0.5rem;
+  text-transform: uppercase;
+}
+
+.hashing-note {
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin: 0 0 0.9rem;
+}
+
+.hash-input {
+  background: var(--bg-sunken);
+  border: 1px solid var(--border);
+  border-radius: var(--radius) var(--radius) 0 0;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  padding: 0.85rem 1rem;
+  width: 100%;
+  transition: border-color 0.15s ease;
+}
+
+.hash-input:focus {
+  border-color: var(--accent);
+  outline: none;
+}
+
+/* Sits directly under the input, sharing its edge, so the two read as one
+   control: what you typed above, what it hashes to below. */
+.hash-output {
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-top: 0;
+  border-radius: 0 0 var(--radius) var(--radius);
+  color: var(--text);
+  cursor: pointer;
+  display: block;
+  font-family: var(--font-mono);
+  font-size: clamp(1rem, 3.4vw, 1.4rem);
+  font-weight: 600;
+  padding: 1.1rem 1rem;
+  text-align: left;
+  width: 100%;
+  overflow-wrap: anywhere;
+  transition: color 0.12s ease, background 0.12s ease;
+}
+
+.hash-output:hover {
+  background: var(--bg-sunken);
+  color: var(--accent);
+}
+
 /* Usage -------------------------------------------------------------------- */
 
 .usage h2 {

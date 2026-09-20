@@ -6,7 +6,7 @@
     <title>nsfh — not safe for hash</title>
     <meta
       name="description"
-      content="A human-readable unique id generator that only produces rude, obscene phrases. Fast, zero dependencies, dictionary included."
+      content="A human-readable unique id generator that only produces rude, obscene phrases. Random or hashed, fast, zero dependencies, dictionary included."
     />
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text y='13' font-size='13'>🤬</text></svg>" />
     <link rel="stylesheet" href="./styles.css" />
@@ -109,12 +109,34 @@
         <ul id="batch-list" class="batch-list"></ul>
       </section>
 
+      <section class="hashing" aria-labelledby="hashing-heading">
+        <h2 id="hashing-heading">Hash anything</h2>
+        <p class="hashing-note">
+          The same text always comes back as the same phrase — on this page, on your
+          machine, for ever. Handy for giving a boring identifier a memorable name.
+        </p>
+        <label class="visually-hidden" for="hash-input">Text to hash</label>
+        <input
+          id="hash-input"
+          class="hash-input"
+          type="text"
+          value="joey"
+          placeholder="type anything"
+          autocomplete="off"
+          spellcheck="false"
+        />
+        <button id="hash-output" class="hash-output" type="button" title="Click to copy">
+          <span id="hash-text">—</span>
+        </button>
+      </section>
+
       <section class="usage" aria-labelledby="usage-heading">
         <h2 id="usage-heading">Use it</h2>
         <pre><code>npm install nsfh</code></pre>
-        <pre><code><span class="tok-kw">import</span> { generate } <span class="tok-kw">from</span> <span class="tok-str">'nsfh'</span>;
+        <pre><code><span class="tok-kw">import</span> { generate, hash } <span class="tok-kw">from</span> <span class="tok-str">'nsfh'</span>;
 
-generate(); <span class="tok-com">// '<span id="code-sample">stupid-cunt-head</span>'</span></code></pre>
+generate(); <span class="tok-com">// '<span id="code-sample">stupid-cunt-head</span>'</span>
+hash(<span class="tok-str">'joey'</span>); <span class="tok-com">// '<span id="code-hash-sample">feeble-punk-clobberer</span>', every time</span></code></pre>
       </section>
 
       <footer>
