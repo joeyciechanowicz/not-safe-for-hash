@@ -7,6 +7,6 @@
     "types": ["node"],
     "noEmit": true
   },
-  // site/ has its own tsconfig: it resolves "nsfh" to the built declarations.
+  // site/ has its own tsconfig: it resolves "not-safe-for-hash" to the built declarations.
   "include": ["src", "test", "bench", "scripts"]
 }

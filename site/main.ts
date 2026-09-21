@@ -1,5 +1,5 @@
 /**
- * The nsfh demo site.
+ * The not-safe-for-hash demo site.
  *
  * Plain DOM, no framework. The library is resolved through the import map in
  * index.html, so this page consumes the published build rather than a copy of it.
@@ -14,7 +14,7 @@ import {
   idsUntilCollision,
   type Casing,
   type GenerateOptions,
-} from 'nsfh';
+} from 'not-safe-for-hash';
 
 const BATCH_SIZE = 10;
 

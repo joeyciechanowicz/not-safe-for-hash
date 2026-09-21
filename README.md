@@ -1,4 +1,4 @@
-# nsfh
+# not-safe-for-hash
 
 **Human-readable unique ids, but rude.**
 
@@ -17,12 +17,12 @@ you already have into the same rude phrase every time.
 > Every id this package produces is deliberately obscene. That is the whole point.
 > Do not put it in front of customers, and think twice about your logs.
 
-**[Try it in the browser →](https://joeyciechanowicz.github.io/nsfh/)**
+**[Try it in the browser →](https://joeyciechanowicz.github.io/not-safe-for-hash/)**
 
 ## Install
 
 ```sh
-npm install nsfh
+npm install not-safe-for-hash
 ```
 
 Zero runtime dependencies. The dictionary ships inside the package, so there is
@@ -32,7 +32,7 @@ types included.
 ## Usage
 
 ```ts
-import { generate } from 'nsfh';
+import { generate } from 'not-safe-for-hash';
 
 generate();
 // 'stupid-cunt-head'
@@ -50,7 +50,7 @@ generate({ separator: '_', casing: 'upper' });
 CommonJS works the same way:
 
 ```js
-const { generate } = require('nsfh');
+const { generate } = require('not-safe-for-hash');
 ```
 
 ### A batch at a time
@@ -58,7 +58,7 @@ const { generate } = require('nsfh');
 `generateMany` never repeats itself within a batch:
 
 ```ts
-import { generateMany } from 'nsfh';
+import { generateMany } from 'not-safe-for-hash';
 
 generateMany(3);
 // ['fetid-fraud-yapper', 'squirting-shitweasel-mushroom', 'gurgling-arse-ape']
@@ -70,7 +70,7 @@ generateMany(3);
 input to a phrase and keeps it there, on every machine and every run.
 
 ```ts
-import { hash } from 'nsfh';
+import { hash } from 'not-safe-for-hash';
 
 hash('joey');
 // 'feeble-punk-clobberer'
@@ -113,11 +113,13 @@ test suite so it cannot happen by accident.
 ### On the command line
 
 ```sh
-npx nsfh              # one id
-npx nsfh 10           # ten of them
-npx nsfh 5 -w 4 -c pascal
-npx nsfh --stats      # combinations, entropy, collision odds
+npx not-safe-for-hash              # one id
+npx not-safe-for-hash 10           # ten of them
+npx not-safe-for-hash 5 -w 4 -c pascal
+npx not-safe-for-hash --stats      # combinations, entropy, collision odds
 ```
+
+Once installed, the command is just `nsfh`.
 
 ## API
 
@@ -174,7 +176,7 @@ words or check for collisions, same as any other random id. `idsUntilCollision()
 will do the arithmetic for you:
 
 ```ts
-import { idsUntilCollision } from 'nsfh';
+import { idsUntilCollision } from 'not-safe-for-hash';
 
 idsUntilCollision(0.01);              // ~1,269 ids before a 1% chance
 idsUntilCollision(0.5, { words: 5 }); // ~5,284,600
@@ -220,7 +222,7 @@ excuse.
 The lists are plain exported arrays, so you can look before you install:
 
 ```ts
-import { words } from 'nsfh';
+import { words } from 'not-safe-for-hash';
 
 words.adjectives.length; // 600
 words.nouns.includes('bellend'); // true

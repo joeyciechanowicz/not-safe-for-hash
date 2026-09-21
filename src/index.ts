@@ -1,8 +1,8 @@
 /**
- * nsfh — human-readable unique ids, but rude.
+ * not-safe-for-hash — human-readable unique ids, but rude.
  *
  * ```ts
- * import { generate, hash } from 'nsfh';
+ * import { generate, hash } from 'not-safe-for-hash';
  * generate();      // 'stupid-cunt-head' — a different one every time
  * hash('joey');    // the same phrase for 'joey', for ever
  * ```

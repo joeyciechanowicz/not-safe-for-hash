@@ -1,5 +1,5 @@
 {
-  "name": "nsfh",
+  "name": "not-safe-for-hash",
   "version": "0.2.0",
   "description": "Human-readable unique id generator that only produces rude, obscene phrases. Random or hashed, fast, zero dependencies, dictionary included.",
   "keywords": [
@@ -19,11 +19,11 @@
   "author": "Joey Ciechanowicz",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/joeyciechanowicz/nsfh.git"
+    "url": "git+https://github.com/joeyciechanowicz/not-safe-for-hash.git"
   },
-  "homepage": "https://joeyciechanowicz.github.io/nsfh/",
+  "homepage": "https://joeyciechanowicz.github.io/not-safe-for-hash/",
   "bugs": {
-    "url": "https://github.com/joeyciechanowicz/nsfh/issues"
+    "url": "https://github.com/joeyciechanowicz/not-safe-for-hash/issues"
   },
   "type": "module",
   "exports": {

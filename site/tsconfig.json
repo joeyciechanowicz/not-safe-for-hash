@@ -11,7 +11,7 @@
     "rootDir": ".",
     "noEmit": false,
     "paths": {
-      "nsfh": ["../dist/esm/index.d.ts"]
+      "not-safe-for-hash": ["../dist/esm/index.d.ts"]
     }
   },
   "include": ["."]
