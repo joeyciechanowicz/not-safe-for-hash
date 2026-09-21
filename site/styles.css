@@ -181,22 +181,6 @@ button {
   transform: translateY(1px);
 }
 
-.secondary {
-  background: transparent;
-  border: 1px solid var(--border);
-  border-radius: 9px;
-  color: var(--text-dim);
-  cursor: pointer;
-  font-size: 0.85rem;
-  padding: 0.4rem 0.9rem;
-  transition: border-color 0.15s ease, color 0.15s ease;
-}
-
-.secondary:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-}
-
 :focus-visible {
   outline: 2px solid var(--accent-soft);
   outline-offset: 3px;
@@ -279,7 +263,9 @@ input[type="checkbox"] {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
   gap: 1px;
-  /* Card colour so a half-empty last row reads as empty — see .batch-list. */
+  /* Card colour, not border colour: three stats rarely fill the last row
+     exactly, and the leftover cell should read as empty rather than as a
+     stray divider. */
   background: var(--bg-raised);
   border: 1px solid var(--border);
   border-radius: var(--radius);
@@ -315,67 +301,6 @@ input[type="checkbox"] {
   margin: 0.9rem 0 0;
   text-align: center;
   text-wrap: balance;
-}
-
-/* Batch -------------------------------------------------------------------- */
-
-.batch {
-  margin-bottom: 2.5rem;
-}
-
-.batch-header {
-  align-items: center;
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 0.9rem;
-}
-
-.batch-header h2 {
-  font-size: 1rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  margin: 0;
-  text-transform: uppercase;
-  color: var(--text-dim);
-}
-
-.batch-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
-  gap: 1px;
-  /* Card colour, not border colour: ten ids rarely fill the last row exactly,
-     and the leftover cell should read as empty rather than as a stray divider. */
-  background: var(--bg-raised);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-}
-
-.batch-list li {
-  background: var(--bg-raised);
-  box-shadow: 0 0 0 1px var(--border);
-}
-
-.batch-list button {
-  background: none;
-  border: 0;
-  color: var(--text);
-  cursor: pointer;
-  font-family: var(--font-mono);
-  font-size: 0.9rem;
-  padding: 0.75rem 1rem;
-  text-align: left;
-  width: 100%;
-  overflow-wrap: anywhere;
-  transition: background 0.12s ease, color 0.12s ease;
-}
-
-.batch-list button:hover {
-  background: var(--bg-sunken);
-  color: var(--accent);
 }
 
 /* Hashing ------------------------------------------------------------------ */
