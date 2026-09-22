@@ -3,7 +3,7 @@
 **Human-readable unique ids, but rude.**
 
 ```
-stupid-cunt-head
+swampy-hooligan-gargler
 ```
 
 Like the usual `silly-goose-tea` generators — a memorable phrase instead of
@@ -34,7 +34,7 @@ CommonJS builds, TypeScript types included.
 import { generate } from 'not-safe-for-hash';
 
 generate();
-// 'stupid-cunt-head'
+// 'swampy-hooligan-gargler'
 
 generate({ words: 4 });
 // 'niffy-guttural-spunk-pilot'
@@ -148,7 +148,7 @@ Once installed, the command is just `nsfh`.
 | `seed` | `number` | `0` | `hash` only. Namespaces the hash: same input, different seed, different phrase. |
 
 A `Role` is `'adjective'`, `'noun'` or `'suffix'`. The default pattern is one
-of each — that's where `stupid-cunt-head` comes from. Custom patterns can
+of each — that's where `swampy-hooligan-gargler` comes from. Custom patterns can
 repeat a role:
 
 ```ts

@@ -3,7 +3,7 @@
  *
  * ```ts
  * import { generate, hash } from 'not-safe-for-hash';
- * generate();      // 'stupid-cunt-head' — a different one every time
+ * generate();      // 'swampy-hooligan-gargler' — a different one every time
  * hash('joey');    // the same phrase for 'joey', for ever
  * ```
  */
@@ -41,7 +41,7 @@ export interface GenerateOptions {
   random?: () => number;
 }
 
-/** `adjective-noun-suffix`, e.g. `stupid-cunt-head`. */
+/** `adjective-noun-suffix`, e.g. `swampy-hooligan-gargler`. */
 export const DEFAULT_PATTERN: readonly Role[] = Object.freeze<Role[]>([
   'adjective',
   'noun',
@@ -180,7 +180,7 @@ export function parts(options?: GenerateOptions): string[] {
 }
 
 /**
- * One rude id, e.g. `stupid-cunt-head`.
+ * One rude id, e.g. `swampy-hooligan-gargler`.
  *
  * Uses `crypto.getRandomValues` unless `options.random` says otherwise.
  */
