@@ -9,14 +9,11 @@ import {
   combinations,
   entropyBits,
   generate,
-  generateMany,
   hash,
   idsUntilCollision,
   type Casing,
   type GenerateOptions,
 } from 'not-safe-for-hash';
-
-const BATCH_SIZE = 10;
 
 function element<T extends HTMLElement>(id: string): T {
   const found = document.getElementById(id);
@@ -32,8 +29,6 @@ const wordsValue = element<HTMLOutputElement>('words-value');
 const separatorSelect = element<HTMLSelectElement>('separator');
 const casingSelect = element<HTMLSelectElement>('casing');
 const allowRepeatsInput = element<HTMLInputElement>('allow-repeats');
-const batchList = element<HTMLUListElement>('batch-list');
-const batchRefresh = element<HTMLButtonElement>('batch-refresh');
 const hashInput = element<HTMLInputElement>('hash-input');
 const hashOutput = element<HTMLButtonElement>('hash-output');
 const hashText = element('hash-text');
@@ -108,25 +103,6 @@ function roll(): void {
   idDisplay.classList.add('is-rolling');
 }
 
-function refreshBatch(): void {
-  const options = currentOptions();
-  const ids = generateMany(BATCH_SIZE, options);
-
-  batchList.replaceChildren(
-    ...ids.map((id) => {
-      const button = document.createElement('button');
-      button.type = 'button';
-      button.textContent = id;
-      button.title = 'Click to copy';
-      button.addEventListener('click', () => void copy(id));
-
-      const item = document.createElement('li');
-      item.append(button);
-      return item;
-    }),
-  );
-}
-
 function refreshStats(): void {
   const options = currentOptions();
   const total = combinations(options);
@@ -150,7 +126,6 @@ function refreshAll(): void {
   wordsValue.textContent = wordsInput.value;
   roll();
   refreshStats();
-  refreshBatch();
   refreshHash();
 }
 
@@ -160,7 +135,6 @@ idDisplay.addEventListener('click', () => {
 });
 
 rerollButton.addEventListener('click', roll);
-batchRefresh.addEventListener('click', refreshBatch);
 hashInput.addEventListener('input', refreshHash);
 
 hashOutput.addEventListener('click', () => {
