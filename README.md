@@ -6,16 +6,16 @@
 stupid-cunt-head
 ```
 
-The usual `silly-goose-tea` id generators are charming. This one is not. It is the
-same idea — a memorable phrase instead of `f47ac10b-58cc-4372` — drawn from a
-dictionary of nothing but profanity and insults. It is a joke, and it works.
+Like the usual `silly-goose-tea` generators — a memorable phrase instead of
+`f47ac10b-58cc-4372` — except the dictionary is nothing but profanity and
+insults.
 
-It goes both ways: `generate()` invents a new id, and `hash()` turns a string
-you already have into the same rude phrase every time.
+`generate()` makes a new id. `hash()` turns a string you already have into
+the same rude phrase every time.
 
 > [!WARNING]
-> Every id this package produces is deliberately obscene. That is the whole point.
-> Do not put it in front of customers, and think twice about your logs.
+> Every id is deliberately obscene. Keep it away from customers, and think
+> twice about your logs.
 
 **[Try it in the browser →](https://joeyciechanowicz.github.io/not-safe-for-hash/)**
 
@@ -25,9 +25,8 @@ you already have into the same rude phrase every time.
 npm install not-safe-for-hash
 ```
 
-Zero runtime dependencies. The dictionary ships inside the package, so there is
-nothing to fetch and nothing to configure. ESM and CommonJS builds, TypeScript
-types included.
+No runtime dependencies. Dictionary ships inside the package. ESM and
+CommonJS builds, TypeScript types included.
 
 ## Usage
 
@@ -47,15 +46,15 @@ generate({ separator: '_', casing: 'upper' });
 // 'BOLLOCKSED_BAMPOT_JUGGLER'
 ```
 
-CommonJS works the same way:
+CommonJS:
 
 ```js
 const { generate } = require('not-safe-for-hash');
 ```
 
-### A batch at a time
+### Batches
 
-`generateMany` never repeats itself within a batch:
+`generateMany` won't repeat a word within a batch:
 
 ```ts
 import { generateMany } from 'not-safe-for-hash';
@@ -66,8 +65,8 @@ generateMany(3);
 
 ### As a hash function
 
-`generate` invents a new id every time. `hash` does the opposite: it maps an
-input to a phrase and keeps it there, on every machine and every run.
+`generate` is random. `hash` is deterministic — same input, same phrase,
+every machine, every run.
 
 ```ts
 import { hash } from 'not-safe-for-hash';
@@ -85,32 +84,32 @@ hash('https://example.com/orders/8f14e45f');
 // 'inflamed-ballbag-wrestler'
 ```
 
-Useful when the thing you are naming already has a boring identifier — a commit
-sha, a url, a branch, a customer number. Everyone who hashes it arrives at the
-same rude name for it, with nothing to store and nothing to look up.
+Good for naming things that already have a boring identifier — a commit sha,
+a url, a branch, a customer number. Everyone hashing it gets the same name,
+with nothing to store or look up.
 
-It takes every option `generate` does, plus a `seed` to namespace it:
+Takes the same options as `generate`, plus `seed` to namespace it:
 
 ```ts
 hash('joey', { words: 4 }); // 'feeble-naff-donkey-sifter'
 hash('joey', { seed: 1 });  // 'unbearable-lurgy-pancake', just as stable
 ```
 
-Input is hashed as UTF-8, so a `Uint8Array` and the string it encodes come out
-alike. `hashParts` gives you the words unjoined, exactly as `parts` does.
+Input is hashed as UTF-8, so a `Uint8Array` and the string it encodes hash
+the same. `hashParts` gives the words unjoined, like `parts` does.
 
 > [!IMPORTANT]
-> This is not a cryptographic hash, and it cannot be collision-free: there are
-> only as many phrases as the table below says, so two inputs landing on one id
-> is a matter of when, not if. Unlike a clash between two random ids, this kind
-> is permanent — those two inputs map to that phrase for good. Name things with
-> it; do not key things by it.
+> Not a cryptographic hash, and not collision-free — there are only as many
+> phrases as the table below allows, so two inputs landing on one id is a
+> matter of when, not if. And unlike a clash between random ids, it's
+> permanent: those two inputs share that phrase for good. Use it to name
+> things, not to key them.
 
-Output is tied to the packaged dictionary. Adding or removing a single word
-moves every phrase, so a dictionary change is a breaking change — pinned by the
-test suite so it cannot happen by accident.
+Output depends on the packaged dictionary. Adding or removing a word shifts
+every phrase, so a dictionary change is a breaking change — the test suite
+pins it so that can't happen by accident.
 
-### On the command line
+### Command line
 
 ```sh
 npx not-safe-for-hash              # one id
@@ -145,12 +144,12 @@ Once installed, the command is just `nsfh`.
 | `separator` | `string` | `'-'` | `''` when casing is `camel` or `pascal`. |
 | `casing` | `'lower' \| 'upper' \| 'title' \| 'camel' \| 'pascal'` | `'lower'` | |
 | `allowRepeats` | `boolean` | `false` | Whether one word may appear twice in an id. |
-| `random` | `() => number` | `crypto.getRandomValues` | `generate` only. Supply your own to make output reproducible. |
+| `random` | `() => number` | `crypto.getRandomValues` | `generate` only. Supply your own for reproducible output. |
 | `seed` | `number` | `0` | `hash` only. Namespaces the hash: same input, different seed, different phrase. |
 
-A `Role` is `'adjective'`, `'noun'` or `'suffix'`. The default pattern is one of
-each, which is where `stupid-cunt-head` comes from. Custom patterns can repeat a
-role as much as you like:
+A `Role` is `'adjective'`, `'noun'` or `'suffix'`. The default pattern is one
+of each — that's where `stupid-cunt-head` comes from. Custom patterns can
+repeat a role:
 
 ```ts
 generate({ pattern: ['adjective', 'adjective', 'noun'] });
@@ -159,7 +158,7 @@ generate({ pattern: ['adjective', 'adjective', 'noun'] });
 
 ## How unique is it?
 
-Random, not sequential — so the question is a birthday-problem one. The packaged
+Random, not sequential, so it's a birthday-problem question. The packaged
 dictionary holds 600 adjectives, 421 nouns and 317 suffixes.
 
 | Words | Combinations | Entropy | 50% chance of a collision after |
@@ -170,10 +169,10 @@ dictionary holds 600 adjectives, 421 nouns and 317 suffixes.
 | 5 | 20,145,067,236,000 | 44.2 bits | ~5,284,600 ids |
 | 6 | 12,046,750,207,128,000 | 53.4 bits | ~129,229,803 ids |
 
-Three words is fine for naming a few thousand things — build runs, test fixtures,
-staging environments, pull request branches. If you need a primary key, use more
-words or check for collisions, same as any other random id. `idsUntilCollision()`
-will do the arithmetic for you:
+Three words is fine for naming a few thousand things — build runs, test
+fixtures, staging environments, pull request branches. For a primary key,
+use more words or check for collisions, same as any other random id.
+`idsUntilCollision()` does the arithmetic:
 
 ```ts
 import { idsUntilCollision } from 'not-safe-for-hash';
@@ -182,20 +181,20 @@ idsUntilCollision(0.01);              // ~1,269 ids before a 1% chance
 idsUntilCollision(0.5, { words: 5 }); // ~5,284,600
 ```
 
-Ids are drawn from `crypto.getRandomValues` with rejection sampling, so every
-word is equally likely — a plain `% length` would quietly favour the start of the
-alphabet. On a runtime with no Web Crypto it falls back to `Math.random`, which
-is fine for ids and not fine for secrets.
+Ids come from `crypto.getRandomValues` with rejection sampling, so every
+word is equally likely — a plain `% length` would quietly favour the start
+of the alphabet. Falls back to `Math.random` on runtimes without Web
+Crypto, which is fine for ids and not fine for secrets.
 
-The same table governs `hash`, since it draws from the same dictionary — but
-read it differently. A collision between two random ids is bad luck you can
-retry; a collision between two hashed inputs is a fact about those two inputs,
-and it will still be there tomorrow.
+The same table governs `hash`, since it draws from the same dictionary —
+but read it differently. A collision between random ids is bad luck you can
+retry; a collision between two hashed inputs is a fact about those inputs,
+and it's still there tomorrow.
 
 ## Speed
 
-About three million ids a second on a laptop-class machine, because entropy is
-drawn 256 words at a time rather than one syscall per word:
+About three million ids a second on a laptop-class machine — entropy is
+drawn 256 words at a time instead of one syscall per word:
 
 ```
 generate()                            3,056,737 ops/sec  (327 ns each)
@@ -205,21 +204,20 @@ hash('joey')                          2,228,767 ops/sec  (449 ns each)
 hash(a 62-byte url)                   1,696,370 ops/sec  (589 ns each)
 ```
 
-Hashing costs a MurmurHash3 pass over the input on top of the word selection,
-so unlike `generate` it gets slower as the input gets longer — gently, at
-around 750 MB a second.
+Hashing adds a MurmurHash3 pass over the input on top of word selection, so
+unlike `generate` it slows down as the input grows — slowly, around 750 MB
+a second.
 
 Run `npm run bench` to check it yourself.
 
 ## The word list
 
-Profanity, crudeness and insults are the entire point. Slurs are not: nothing in
-the dictionary targets race, ethnicity, nationality, sexuality, gender identity,
-religion or disability. That line is enforced by a test and explained in
-[CONTRIBUTING.md](CONTRIBUTING.md) — it is what keeps this a joke rather than an
-excuse.
+Profanity, crudeness and insults are the point. Slurs aren't: nothing in
+the dictionary targets race, ethnicity, nationality, sexuality, gender
+identity, religion or disability. A test enforces that line;
+[CONTRIBUTING.md](CONTRIBUTING.md) explains it.
 
-The lists are plain exported arrays, so you can look before you install:
+The lists are plain exported arrays:
 
 ```ts
 import { words } from 'not-safe-for-hash';
@@ -239,31 +237,31 @@ npm run bench
 npm run build:site # static site into dist-site/
 ```
 
-There are no runtime dependencies and the only devDependencies are TypeScript and
-its Node types. Tests run straight off the TypeScript sources using Node's native
-type stripping.
+No runtime dependencies; the only devDependencies are TypeScript and its
+Node types. Tests run straight off the TypeScript sources using Node's
+native type stripping.
 
 ### The site
 
-`site/` is a single page with no framework and no bundler. It loads the built
-package through an import map, so it consumes exactly what npm publishes. Serve
-it locally with any static server:
+`site/` is a single page, no framework, no bundler. It loads the built
+package through an import map, so it consumes exactly what npm publishes.
+Serve it locally with any static server:
 
 ```sh
 npm run build:site
 npx http-server dist-site
 ```
 
-It deploys to GitHub Pages from `.github/workflows/pages.yml` on every push to
+Deploys to GitHub Pages from `.github/workflows/pages.yml` on every push to
 `main`. That workflow needs Pages switched on once, under
 **Settings → Pages → Build and deployment → Source → GitHub Actions**.
 
-Pick "GitHub Actions", not "Deploy from a branch". The latter is the option the
-settings page offers first, and it makes GitHub run Jekyll over the repo root
-instead of serving this workflow's artifact. Since `dist-site/` is gitignored and
-there is no `index.html` at the root, that build publishes the README as the site
-— and because it runs on the same push, it can land *after* this workflow and
-quietly overwrite it.
+Pick "GitHub Actions", not "Deploy from a branch" — the latter is what the
+settings page offers first, and it makes GitHub run Jekyll over the repo
+root instead of serving this workflow's artifact. Since `dist-site/` is
+gitignored and there's no `index.html` at the root, that build publishes
+the README as the site — and because it runs on the same push, it can land
+*after* this workflow and overwrite it.
 
 ## Licence
 
