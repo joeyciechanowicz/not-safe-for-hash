@@ -1,6 +1,6 @@
 {
   "name": "not-safe-for-hash",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "description": "Human-readable unique id generator that only produces rude, obscene phrases. Random or hashed, fast, zero dependencies, dictionary included.",
   "keywords": [
     "id",
