@@ -174,6 +174,6 @@ document.addEventListener('keydown', (event) => {
 // The samples in the usage block should be things this page really produced —
 // the hashed one especially, since it is a claim about a specific input.
 codeSample.textContent = generate();
-codeHashSample.textContent = hash('joey');
+codeHashSample.textContent = hash('apples and bananas');
 
 refreshAll();
